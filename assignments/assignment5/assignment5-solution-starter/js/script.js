@@ -82,12 +82,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 // On first load, show home view
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
-  allCategoriesUrl,
-  [...], // ***** <---- TODO: STEP 1: Substitute [...] ******
+  allCategoriesUrl,          // MY CODE
+  buildAndShowHomeHTML,      // MY CODE  
   true); // Explicitly setting the flag to get JSON from server processed into an object literal
 });
-// *** finish **
 
+// *** finish **
 
 // Builds HTML for the home page based on categories array
 // returned from the server.
@@ -103,6 +103,8 @@ function buildAndShowHomeHTML (categories) {
       // variable's name implies it expects.
       // var chosenCategoryShortName = ....
 
+      var chosenCategoryShortName =         // MY CODE
+        chooseRandomCategory(categories);   // MY CODE
 
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
       // chosen category from STEP 2. Use existing insertProperty function for that purpose.
@@ -116,16 +118,24 @@ function buildAndShowHomeHTML (categories) {
       // it into the home html snippet.
       //
       // var homeHtmlToInsertIntoMainPage = ....
-
+       
+      var randomCategoryShortName = "\'" + chosenCategoryShortName.short_name + "\'";    // MY CODE
+      var homeHtmlToInsertIntoMainPage = "<section class='row'>";                        // MY CODE
+          homeHtmlToInsertIntoMainPage += homeHtml;                                      // MY CODE
+          homeHtmlToInsertIntoMainPage = insertProperty(homeHtmlToInsertIntoMainPage,    // MY CODE
+                                                         "randomCategoryShortName",      // MY CODE
+                                                         randomCategoryShortName);       // MY CODE
+          homeHtmlToInsertIntoMainPage += "</section>";                                  // MY CODE
+          console.log("homeHtmlToInsertIntoMainPage: " + homeHtmlToInsertIntoMainPage);  // MY CODE
 
       // TODO: STEP 4: Insert the the produced HTML in STEP 3 into the main page
       // Use the existing insertHtml function for that purpose. Look through this code for an example
       // of how to do that.
       // ....
-
-    },
-    false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
-}
+      insertHtml("#main-content", homeHtmlToInsertIntoMainPage);   // MY CODE
+   },
+   false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
+ }
 
 
 // Given array of category objects, returns a random category object.
@@ -152,10 +162,9 @@ dc.loadMenuCategories = function () {
 dc.loadMenuItems = function (categoryShort) {
   showLoading("#main-content");
   $ajaxUtils.sendGetRequest(
-    menuItemsUrl + categoryShort,
+    menuItemsUrl + categoryShort, 
     buildAndShowMenuItemsHTML);
 };
-
 
 // Builds HTML for the categories page based on the data
 // from the server
